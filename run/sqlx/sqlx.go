@@ -13,8 +13,9 @@ func NamedQueryStruct[T any](db *jsqlx.DB, s sqb.Statement[T], arg any) ([]*T, e
 	if err != nil {
 		return nil, fmt.Errorf("failed to query: %w", err)
 	}
+	defer rows.Close()
 
-	return scanRows[T](rows)
+	return structScanRows[T](rows)
 }
 
 func NamedQueryStructContext[T any](ctx context.Context, db *jsqlx.DB, s sqb.Statement[T], arg any) ([]*T, error) {
@@ -22,13 +23,12 @@ func NamedQueryStructContext[T any](ctx context.Context, db *jsqlx.DB, s sqb.Sta
 	if err != nil {
 		return nil, fmt.Errorf("failed to query: %w", err)
 	}
-
-	return scanRows[T](rows)
-}
-
-func scanRows[T any](rows *jsqlx.Rows) ([]*T, error) {
 	defer rows.Close()
 
+	return structScanRows[T](rows)
+}
+
+func structScanRows[T any](rows *jsqlx.Rows) ([]*T, error) {
 	r := make([]*T, 0, 32)
 	for rows.Next() {
 		var row T
