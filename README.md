@@ -47,10 +47,10 @@ import "github.com/routis819/sqb"
 
 // Assuming you have types implementing Clause, Opener, and Closer:
 builder := &sqb.StmtBuilder[User]{}
-builder.MustAppend(SelectClause("id", "name"))
-builder.MustAppend(FromClause("users"))
-builder.MustAppend(WhereClause("id = :id"))
-builder.MustAppend(LimitClause(1))
+builder.MustAppend(sqb.Select("id", "name"))
+builder.MustAppend(sqb.From("users"))
+builder.MustAppend(sqb.Where("id = :id"))
+builder.MustAppend(sqb.Limit(1))
 
 stmt := builder.MustStmt()
 fmt.Println(stmt.String()) // "SELECT id, name FROM users WHERE id = :id LIMIT 1;"

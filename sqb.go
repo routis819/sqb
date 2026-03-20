@@ -42,7 +42,7 @@ func (sb *StmtBuilder[T]) AcceptNext(c Clause) bool {
 
 func (sb *StmtBuilder[T]) Append(c Clause) error {
 	if !sb.AcceptNext(c) {
-		return fmt.Errorf("failed  to append: %v", c)
+		return fmt.Errorf("failed to append: %v", c)
 	}
 	sb.building = append(sb.building, c)
 
